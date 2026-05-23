@@ -1,0 +1,43 @@
+﻿@model MyStore.myDTO.User_DTO
+
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <img src="@(string.IsNullOrEmpty(Model.Filename) ? "/images/default-avatar.png" : Model.Filename)"
+                 class="img-fluid rounded-circle border" width="150" height="150" alt="User Avatar" />
+            <h4 class="mt-3">@Model.Fullname</h4>
+        </div>
+
+        <div class="col-md-8">
+            <h3>Thông tin cá nhân</h3>
+            <hr />
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Username:</th>
+                        <td>@Model.Username</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <th>Số điện thoại:</th>
+                        <td>@Model.PhoneNumber</td>
+                    </tr>
+                    <tr>
+                        <th>Ngày tạo tài khoản:</th>
+                        <td>@Model.CreatedAt?.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a href="@Url.Action("EditProfile", "Account")" class="btn btn-primary">Chỉnh sửa thông tin</a>
+            <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Đăng xuất</a>
+        </div>
+    </div>
+</div>

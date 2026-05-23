@@ -1,0 +1,285 @@
+﻿@model List<MyStore.myDTO.OrderStatus_DTO>
+
+<style>
+    /* Giữ nguyên phần CSS cơ bản */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+    }
+
+    .openModal.review-button {
+        padding: 8px 12px;
+        background-color: #ee4d2d;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s ease;
+    }
+
+        .openModal.review-button:hover {
+            background-color: #ff5722;
+        }
+
+    .filter-tabs {
+        display: flex;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+        overflow-x: auto; /* Cho phép cuộn ngang nếu nhiều tab */
+    }
+
+    .filter-tab {
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-right: 10px;
+        white-space: nowrap; /* Ngăn chữ xuống dòng */
+    }
+
+        .filter-tab.active {
+            border-bottom: 2px solid #ee4d2d;
+            color: #ee4d2d;
+            font-weight: bold;
+        }
+
+    .order-card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+
+    .shop-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-weight: bold;
+        align-items: center;
+    }
+
+    .product-info {
+        display: flex;
+        margin-bottom: 15px;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        background-color: #f5f5f5;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .product-details {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start; /* Căn theo đầu dòng */
+        margin-bottom: 5px;
+    }
+
+    .product-name {
+        font-weight: 500;
+        flex-grow: 1; /* Chiếm không gian còn lại */
+    }
+
+    .product-actions {
+        margin-top: 5px;
+        margin-left: 15px; /* Khoảng cách với tên sản phẩm */
+        flex-shrink: 0; /* Ngăn không bị co lại */
+    }
+
+    .product-variant {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+
+
+    .checkbox {
+        margin-right: 10px;
+    }
+
+    .action-button {
+        margin-right: 10px;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        background: none;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .price-info {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .price-section {
+        display: flex;
+        align-items: center;
+    }
+
+    .original-price {
+        text-decoration: line-through;
+        color: #666;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+    .final-price {
+        color: #ee4d2d;
+        font-weight: bold;
+        margin-right: 15px;
+    }
+
+    .quantity {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .total-price {
+        text-align: right;
+        margin-top: 10px;
+        font-weight: bold;
+        padding-top: 10px;
+        border-top: 1px dashed #eee;
+    }
+
+    .order-status {
+        color: #ee4d2d;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .shop-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 15px;
+    }
+
+    .footer-button {
+        margin-left: 10px;
+        padding: 5px 15px;
+        border: 1px solid #ddd;
+        background: none;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px dashed #ddd;
+        margin: 15px 0;
+    }
+    /* Thêm hoặc cập nhật các quy tắc CSS sau */
+    .product-image {
+        width: 80px;
+        height: 80px;
+        background-color: #f5f5f5;
+        margin-right: 15px;
+        flex-shrink: 0;
+        overflow: hidden; /* Ẩn phần ảnh vượt quá kích thước */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-image img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; /* Giữ tỷ lệ ảnh nhưng vừa với khung */
+        /* Hoặc có thể dùng object-fit: cover nếu muốn ảnh lấp đầy khung */
+    }
+
+    .no-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f5;
+        color: #999;
+        font-size: 12px;
+    }
+
+</style>
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Đơn hàng của tôi</h1>
+                <nav class="d-flex align-items-center">
+                    <a asp-controller="Home" asp-action="Index">Trang chủ<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="#">Đơn hàng của tôi</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <div class="filter-tabs">
+        <div class="filter-tab active" data-status="all">Tất cả</div>
+        <div class="filter-tab" data-status="0">Chờ thanh toán</div>
+        <div class="filter-tab" data-status="2">Vận chuyển</div>
+        <div class="filter-tab" data-status="4">Hoàn thành</div>
+        <div class="filter-tab" data-status="5">Đã hủy</div>
+        <div class="filter-tab" data-status="6">Trả hàng/Hoàn tiền</div>
+    </div>
+
+    <div id="orderContainer">
+            @await Html.PartialAsync("Order_Status", Model)
+            @await Html.PartialAsync("formfeedback", Model)
+    </div>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".filter-tab").click(function () {
+            // Xóa active class từ tất cả các tab
+            $(".filter-tab").removeClass("active");
+            // Thêm active class vào tab được click
+            $(this).addClass("active");
+
+            // Lấy giá trị status từ data attribute
+            var selectedStatus = $(this).data("status");
+
+            console.log("Lọc đơn hàng trạng thái:", selectedStatus);
+
+            // Hiển thị loading
+            $("#orderContainer").html('<div class="text-center py-4"><i class="fas fa-spinner fa-spin"></i> Đang tải đơn hàng...</div>');
+
+            // Gọi AJAX để cập nhật danh sách đơn hàng
+            $.ajax({
+                url: '@Url.Action("FilterOrders", "OrderStatus")',
+                type: 'GET',
+                data: { status: selectedStatus },
+                success: function (data) {
+                    $("#orderContainer").html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Lỗi AJAX:", error);
+                    $("#orderContainer").html(
+                        '<div class="alert alert-danger">' +
+                        'Lỗi khi tải đơn hàng: ' + error +
+                        '</div>'
+                    );
+                }
+            });
+        });
+    });
+</script>

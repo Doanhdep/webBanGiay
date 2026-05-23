@@ -1,0 +1,350 @@
+﻿@using MyStore.Helpers
+@model PaginatedList<MyStore.myDTO.Product_DTO>
+@{
+	ViewData["Title"] = "Shop";
+}
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>
+					Danh mục cửa hàng
+				</h1>
+				<nav class="d-flex align-items-center">
+					<a href="index.html">Trang chủ<span class="lnr lnr-arrow-right"></span></a>
+					<a href="#">Cửa hàng<span class="lnr lnr-arrow-right"></span></a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+<div class="container">
+	<div class="row">
+		<div class="col-xl-3 col-lg-4 col-md-5">
+			@await Component.InvokeAsync("MenuCategory")
+			<div class="sidebar-filter mt-50">
+				<div class="top-filter-head">
+					Bộ lọc sản phẩm
+				</div>
+				<div class="common-filter">
+					<div class="head">Đánh giá sao</div>
+					<form id="ratingFilterForm">
+						<!-- Giữ giá trị rating đã chọn -->
+						<input type="hidden" id="ratingSelect" value="@ViewBag.RatingSelect">
+
+						<ul>
+							<li class="filter-list">
+								<input class="pixel-radio" type="radio" id="rating5" name="rating" value="5"
+									   onchange="filterByRating(this.value)">
+								<label for="rating5">⭐⭐⭐⭐⭐ (5 sao)</label>
+							</li>
+							<li class="filter-list">
+								<input class="pixel-radio" type="radio" id="rating4" name="rating" value="4"
+									   onchange="filterByRating(this.value)">
+								<label for="rating4">⭐⭐⭐⭐ (4 sao trở lên)</label>
+							</li>
+							<li class="filter-list">
+								<input class="pixel-radio" type="radio" id="rating3" name="rating" value="3"
+									   onchange="filterByRating(this.value)">
+								<label for="rating3">⭐⭐⭐ (3 sao trở lên)</label>
+							</li>
+							<li class="filter-list">
+								<input class="pixel-radio" type="radio" id="rating2" name="rating" value="2"
+									   onchange="filterByRating(this.value)">
+								<label for="rating2">⭐⭐ (2 sao trở lên)</label>
+							</li>
+							<li class="filter-list">
+								<input class="pixel-radio" type="radio" id="rating1" name="rating" value="1"
+									   onchange="filterByRating(this.value)">
+								<label for="rating1">⭐ (1 sao trở lên)</label>
+							</li>
+						</ul>
+					</form>
+
+				</div>
+				<div class="col-lg-12">
+					<div class="mb-3">
+						<h4 class="mb-2">Lọc theo giá</h4>
+						<form id="filterForm">
+							<input type="hidden" name="minPrice" id="hiddenMinPrice" value="@ViewBag.MinPrice" />
+
+							<!-- Thanh trượt giá -->
+							<input type="range" class="form-range w-100" id="rangeInput" name="maxPrice" style="background: orange; accent-color: orange"
+								   min="0" max="@ViewBag.MaxPriceLimit"
+								   value="@ViewBag.MaxPrice">
+							<output id="amount">@ViewBag.MaxPrice</output>
+
+							<!-- Input ẩn để lưu maxPrice -->
+							<input type="hidden" id="hiddenMaxPrice" name="maxPrice" value="@ViewBag.MaxPrice" />
+
+						</form>
+
+
+					</div>
+
+					<form id="filterFormInputs">
+						<!-- Hidden inputs để lưu giá trị -->
+						<input type="hidden" id="hiddenMinPrice" name="minPrice" value="@ViewBag.MinPrice" />
+						<input type="hidden" id="hiddenMaxPrice" name="maxPrice" value="@ViewBag.MaxPrice" />
+
+						<div class="form-row">
+							<div class="form-group col-md-12">
+								<label for="minPrice">Giá tối thiểu:</label>
+								<input type="text" id="minPrice" class="form-control" value="@ViewBag.MinPrice" placeholder="0 VND">
+							</div>
+
+							<div class="form-group col-md-12">
+								<label for="maxPrice">Giá tối đa:</label>
+								<input type="text" id="maxPrice" class="form-control" value="@ViewBag.MaxPrice" placeholder="-- VND">
+							</div>
+
+
+							<div class="form-group col-md-12 d-flex align-items-center">
+								<button type="button" id="btnFilterPrice" class="genric-btn primary-border radius" style="width: 110px!important; margin-right: 10px;">Lọc</button>
+								<button type="button" id="btnClearFilter" class="genric-btn primary-border radius" style="width: 110px!important;">Bỏ Lọc</button>
+							</div>
+
+
+
+						</div>
+					</form>
+
+
+				</div>
+
+			</div>
+		</div>
+		<div class="col-xl-9 col-lg-8 col-md-7">
+			<!-- Start Filter Bar -->
+			@await Html.PartialAsync("filterbar", Model)
+			<!-- End Filter Bar -->
+
+
+		</div>
+	</div>
+</div>
+
+<!-- Start related-product Area -->
+@await Component.InvokeAsync("ProductList")
+
+
+<!-- End related-product Area -->
+<!-- Ajax phân trang -->
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			// Danh sách các input cần định dạng
+			var priceInputs = $("#minPrice, #maxPrice");
+
+			// Định dạng giá trị khi trang tải
+			priceInputs.each(function () {
+				formatPriceInput($(this));
+			});
+
+			// Khi nhập liệu
+			priceInputs.on("input", function () {
+				var rawValue = $(this).val().replace(/\D/g, ""); // Chỉ giữ số
+				if (rawValue !== "") {
+					$(this).val(parseInt(rawValue).toLocaleString("vi-VN")); // Định dạng lại số
+				}
+			});
+
+			// Khi focus để nhập số dễ dàng hơn
+			priceInputs.on("focus", function () {
+				var rawValue = $(this).val().replace(/\D/g, ""); // Chỉ giữ số
+				$(this).val(rawValue); // Hiển thị số không định dạng để dễ nhập
+			});
+
+			// Khi mất focus -> hiển thị lại theo định dạng VND
+			priceInputs.on("blur", function () {
+				formatPriceInput($(this));
+			});
+
+			function formatPriceInput(input) {
+				var rawValue = input.val().replace(/\D/g, ""); // Chỉ giữ số
+				if (rawValue !== "") {
+					input.val(parseInt(rawValue).toLocaleString("vi-VN") + " VND");
+				}
+			}
+		});
+
+
+
+
+
+
+		$(document).ready(function () {
+			var selectedRating = $("#ratingSelect").val();
+			if (selectedRating) {
+				$("input[name='rating'][value='" + selectedRating + "']").prop("checked", true);
+			}
+
+			$("#rangeInput").on("input", function () {
+				var maxPrice = $(this).val();
+				var formattedPrice = parseInt(maxPrice).toLocaleString("vi-VN") + " VND"; // Định dạng tiền tệ
+
+				// Cập nhật ô nhập giá tối đa (number)
+				$("#hiddenMaxPrice").val(maxPrice); // Cập nhật input ẩn
+				$("#amount").text(formattedPrice); // Hiển thị giá trị đã định dạng
+
+				console.log("🔄 Cập nhật từ thanh trượt: maxPrice =", formattedPrice);
+
+				updateProductList(1);
+			});
+
+
+			// Khi nhập giá vào ô số
+			$("#minPrice, #maxPrice").on("input", function () {
+				updateHiddenPriceInputs();
+
+				if ($(this).attr("id") === "maxPrice") {
+					$("#rangeInput").val($(this).val()); // Cập nhật thanh trượt theo giá nhập
+					$("#amount").text($(this).val() + " VND");
+					console.log("📝 Nhập maxPrice thủ công:", $(this).val());
+				}
+			});
+
+			// Khi nhấn nút lọc giá
+			$("#btnFilterPrice").click(function () {
+				updateHiddenPriceInputs();
+
+				var minPrice = $("#hiddenMinPrice").val().trim();
+				var maxPrice = $("#hiddenMaxPrice").val().trim();
+
+				minPrice = minPrice === "" ? null : minPrice;
+				maxPrice = maxPrice === "" ? null : maxPrice;
+
+				console.log("🔍 Đang lọc với giá:", minPrice, maxPrice);
+				updateProductList(1);
+			});
+			// bỏ lọc
+
+			$("#btnClearFilter").click(function () {
+				// Đặt lại giá trị của tất cả bộ lọc về mặc định
+				$("#minPrice").val("");
+				$("#maxPrice").val("");
+				$("#hiddenMinPrice").val("");
+				$("#hiddenMaxPrice").val("");
+				$("#ratingSelect").val("");
+				$("#supplierSelect").val("");
+				$("#sortPriceSelect").val("asc"); // Nếu có mặc định là "asc"
+
+				// Cập nhật giao diện (ví dụ: đặt lại giá trên thanh trượt)
+				$("#rangeInput").val(0);
+				$("#amount").text("0 VND");
+
+				console.log("🔄 Đã reset bộ lọc!");
+
+				// Gọi lại hàm để lấy danh sách sản phẩm
+				callGetAction(1, 6);
+			});
+
+
+			function updateHiddenPriceInputs() {
+				$("#hiddenMinPrice").val($("#minPrice").val());
+				$("#hiddenMaxPrice").val($("#maxPrice").val());
+				console.log("✅ Hidden inputs đã cập nhật:", {
+					minPrice: $("#hiddenMinPrice").val(),
+					maxPrice: $("#hiddenMaxPrice").val()
+				});
+			}
+		});
+
+
+
+
+
+		function filterByRating(rating) {
+			$("#ratingSelect").val(rating);
+			updateProductList(1); // Load lại danh sách sản phẩm từ trang 1
+		}
+		function changePageSize() {
+			updateProductList(1); // Khi thay đổi số lượng hiển thị, luôn về trang đầu tiên
+		}
+		function filterBySupplier(supplierId) {
+			$("#supplierSelect").val(supplierId);
+			updateProductList(1);
+		}
+		function changeFilter() {
+			updateProductList(1); // Khi thay đổi bộ lọc, luôn về trang đầu tiên
+		}
+		function updatePriceFilter() {
+			var maxPrice = $("#rangeInput").val();
+			$("#maxPrice").val(maxPrice);  // Đồng bộ input ẩn
+			$("#amount").text(maxPrice);   // Hiển thị giá trị mới
+
+			updateProductList(1);          // Cập nhật danh sách sản phẩm
+		}
+		function updateProductList(pageNumber) {
+			var pageSize = $("#pageSizeSelect").val() || null;
+			var sortOrder = $("#sortPriceSelect").val() || null;
+			var supplier = $("#supplierSelect").val() || null;
+			var minPrice = $("#minPrice").val() || null;
+			var maxPrice = $("#maxPrice").val() || null;
+			var rating = $("#ratingSelect").val() || null;
+
+			// Gọi lại hàm AJAX với toàn bộ thông tin hiện tại
+			callGetAction(pageNumber, pageSize, supplier, minPrice, maxPrice, sortOrder, rating);
+		}
+
+
+		function callGetAction(pageNumber, pageSize, supplier = null, minPrice = null, maxPrice = null, sortOrder = null, rating = null, query = null) {
+			// Nếu sortOrder chưa có giá trị, lấy từ ViewBag hoặc giao diện hiện tại
+			if (!sortOrder) {
+				sortOrder = $("#sortPriceSelect").val() || "asc"; // Hoặc lấy từ 1 input ẩn trong giao diện
+			}
+			supplier = $("#supplierSelect").val();
+			if (supplier == "0" || supplier == "") {
+				supplier = null;
+			}
+			if (!rating) {
+				rating = $("#ratingSelect").val() || null;
+			}
+			// Lấy giá trị từ hidden inputs thay vì input hiển thị
+			var minPrice = $("#hiddenMinPrice").val().trim();
+			var maxPrice = $("#hiddenMaxPrice").val().trim();
+
+			// Chuyển đổi thành số (nếu có)
+			minPrice = minPrice !== "" ? parseFloat(minPrice) : null;
+			maxPrice = maxPrice !== "" ? parseFloat(maxPrice) : null;
+
+			// Lấy query từ ViewBag nếu chưa có
+			var query = '@Html.Raw(ViewBag.SearchQuery)';
+			query = query ? decodeURIComponent(query) : ''; // Giải mã URL nếu có
+
+			$.ajax({
+				url: '@Url.Action("PageList", "Product")',
+				type: "GET",
+				data: {
+					pageNumber: pageNumber,
+					pageSize: pageSize,
+					supplier: supplier,
+					minPrice: minPrice,
+					maxPrice: maxPrice,
+					sortOrder: sortOrder,
+					rating: rating,
+					query :query
+				},
+				success: function (result) {
+					$('#productItem').html($(result).find("#productItem").html());
+					$('#pagination').html($(result).find("#pagination").html());
+					$('#pagination1').html($(result).find("#pagination1").html());
+
+					// Cập nhật lại sortOrder vào input ẩn để duy trì giá trị
+					$('#sortOrderInput').val(sortOrder);
+				},
+				error: function (xhr, status, error) {
+					console.error("Lỗi AJAX:", error);
+				}
+			});
+		}
+
+
+	</script>
+}
+
+
+

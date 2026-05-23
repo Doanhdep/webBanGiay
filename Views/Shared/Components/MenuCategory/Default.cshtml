@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MyStore.myDTO.Product_DTO>
+
+<div class="sidebar-categories">
+    <div class="head">Danh mục sản phẩm </div>
+    <ul class="main-categories">
+        @foreach (var item in Model)
+        {
+            var categoryId = "category-" + item.CategoryId; // ID duy nhất cho collapse
+
+            <li class="main-nav-list">
+                <a href="#" data-toggle="collapse" data-target="#@categoryId"
+                   aria-expanded="false" aria-controls="@categoryId"
+                   onclick="toggleCategory('@categoryId')">
+                    <span class="lnr lnr-arrow-right"></span>@item.CategoryName
+                    <span class="number">@item.coutProduct</span>
+                </a>
+
+                <ul class="collapse" id="@categoryId">
+                    @await Component.InvokeAsync("BrandCategory", new { supplierId = item.SupplierId })
+                </ul>
+            </li>
+        }
+    </ul>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let openedCategories = JSON.parse(localStorage.getItem("openedCategories")) || [];
+
+        // Mặc định đóng tất cả danh mục
+        document.querySelectorAll(".collapse").forEach(element => {
+            element.classList.remove("show");
+        });
+
+        // Mở lại danh mục đã chọn trước đó
+        openedCategories.forEach(id => {
+            let element = document.getElementById(id);
+            if (element) {
+                element.classList.add("show");
+                let link = document.querySelector(`[data-target="#${id}"]`);
+                if (link) {
+                    link.classList.add("active"); // Thêm class để hiển thị trạng thái đã chọn
+                }
+            }
+        });
+
+        // Xử lý sự kiện khi nhấn vào danh mục
+        document.querySelectorAll(".main-nav-list a").forEach(link => {
+            link.addEventListener("click", function (event) {
+                let categoryId = this.getAttribute("data-target").substring(1);
+                let index = openedCategories.indexOf(categoryId);
+
+                if (index === -1) {
+                    openedCategories.push(categoryId);
+                } else {
+                    openedCategories.splice(index, 1);
+                }
+
+                localStorage.setItem("openedCategories", JSON.stringify(openedCategories));
+            });
+        });
+    });
+</script>
+
+

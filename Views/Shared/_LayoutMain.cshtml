@@ -1,0 +1,362 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="~/img/fav.png">
+	<!-- Author Meta -->
+	<meta name="author" content="CodePixar">
+	<!-- Meta Description -->
+	<meta name="description" content="Bán giày chính hãng, thời trang nam nữ, đồng hồ, áo quần cao cấp - Mua ngay tại bandathang.store với nhiều ưu đãi hấp dẫn!">
+
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="giày nam, giày nữ, giày sneaker, giày thể thao, giày chính hãng, đồng hồ thời trang, áo quần nam nữ, mua giày online, bandathang.store">
+
+	<!-- Meta Character Set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Bạn Đặt Hàng Shop</title>
+	<!--
+		CSS
+		============================================= -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel="stylesheet" href="~/css/linearicons.css">
+	<link rel="stylesheet" href="~/css/font-awesome.min.css">
+	<link rel="stylesheet" href="~/css/themify-icons.css">
+	<link rel="stylesheet" href="~/css/bootstrap.css">
+	<link rel="stylesheet" href="~/css/owl.carousel.css">
+	<link rel="stylesheet" href="~/css/nice-select.css">
+	<link rel="stylesheet" href="~/css/nouislider.min.css">
+	<link rel="stylesheet" href="~/css/ion.rangeSlider.css" />
+	<link rel="stylesheet" href="~/css/ion.rangeSlider.skinFlat.css" />
+	<link rel="stylesheet" href="~/css/magnific-popup.css">
+	<link rel="stylesheet" href="~/css/main.css">
+
+	<!-- Thư viện EasyZoom -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/easyzoom/2.5.2/easyzoom.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/easyzoom/2.5.2/easyzoom.min.js"></script>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="~/css/bootstrap.css">
+	<link rel="stylesheet" href="~/css/main.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+
+	<!-- Add FontAwesome -->
+	<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+	@await RenderSectionAsync("Styles", required: false)
+	<style>
+
+		.rating-container {
+			background-color: #f7f7f7;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+		.rating-score {
+			font-size: 24px;
+			font-weight: bold;
+		}
+
+		.star-rating {
+			color: #ffcc00;
+		}
+
+		.rating-buttons {
+			margin-top: 10px;
+		}
+
+		.rating-button {
+			display: inline-block;
+			padding: 10px 15px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			text-decoration: none;
+			color: #333;
+			transition: background 0.3s, border 0.3s;
+			text-align: center;
+			width: 100%; 
+		}
+
+			.rating-button:hover {
+				background-color: #eaeaea;
+			}
+
+		#scrollToTop {
+			position: fixed;
+			bottom: 30px;
+			right: 30px;
+			width: 50px;
+			height: 50px;
+			background: linear-gradient(45deg, #FFD700, #FFA500); /* Màu vàng và cam */
+			color: white;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-decoration: none;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			transition: background 0.3s;
+			cursor: pointer;
+			z-index: 1000; /* Đảm bảo nút nằm trên cùng */
+		}
+
+			#scrollToTop:hover {
+				background: linear-gradient(45deg, #FFA500, #FF8C00); /* Màu cam đậm khi hover */
+			}
+		/* 	css icon  */
+
+		#tnContact {
+			max-width: 230px;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			position: fixed;
+			bottom: 12%;
+			right: 2.7%; /* Đổi từ left: 2% sang right: 2% */
+			z-index: 9999;
+		}
+
+			#tnContact li {
+				list-style-type: none;
+				width: 50px; /* Tăng icon */
+				height: 50px;
+				padding: 0;
+				margin-bottom: 10px;
+				white-space: nowrap;
+				transition: transform 0.2s ease-in-out;
+			}
+
+				/* Khi hover vào icon -> Rung nhẹ nhưng không nghiêng */
+				#tnContact li:hover {
+					transform: scale(1.1);
+				}
+
+				/* Icon */
+				#tnContact li a {
+					display: inline-block;
+					width: 50px;
+					height: 50px;
+					line-height: 50px;
+					margin-left: 10px; /* Giảm khoảng cách để label gần icon hơn */
+					text-align: center;
+					border-radius: 99px;
+					box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+					transition: all 0.3s ease;
+				}
+
+					/* Giảm độ đậm màu của icon */
+					#tnContact li a i {
+						font-size: 22px;
+						color: #fff;
+						opacity: 0.9;
+					}
+
+					/* Hover vào icon thì tăng sáng nhẹ */
+					#tnContact li a:hover {
+						box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+						filter: brightness(1.1);
+					}
+
+				/* Label */
+				#tnContact li .label {
+					position: absolute;
+					right: 60px; /* Chuyển từ left sang right */
+					top: 50%;
+					transform: translateY(-50%);
+					visibility: hidden;
+					opacity: 0;
+					cursor: pointer;
+					font-size: 14px; /* Về font chữ cũ */
+					color: #fff;
+					padding: 6px 12px;
+					border-radius: 99px;
+					transition: all 0.2s ease-in-out;
+				}
+
+				/* Khi hover -> label hiện ngay, dính sát icon */
+				#tnContact li:hover .label {
+					visibility: visible;
+					opacity: 1;
+					right: 52px; /* Chỉnh vị trí label gần hơn */
+				}
+
+				#tnContact li a:hover {
+					box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+					filter: brightness(1.1);
+				}
+
+
+		.iconfb, .label.fb {
+			background: #4267B2;
+			height: 40px;
+			width: auto;
+			display: flex;
+			align-items: center; /* Căn giữa theo chiều dọc */
+			justify-content: center; /* Căn giữa theo chiều ngang */
+			padding: 0 12px; /* Thêm khoảng cách hai bên */
+			border-radius: 20px; /* Bo tròn viền */
+		}
+
+		.iconzalo, .label.zalo {
+			background: #0099FF;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0 12px;
+			border-radius: 20px;
+		}
+
+		.iconsms, .label.sms {
+			background: #00CC66;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0 12px;
+			border-radius: 20px;
+		}
+
+		.iconcall, .label.call {
+			background: #333333;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0 12px;
+			border-radius: 20px;
+		}
+
+
+		/* Mũi tên label hướng về icon */
+		.fb.label:before {
+			border-left-color: #4267B2 !important
+		}
+
+		.zalo.label:before {
+			border-left-color: #0099FF !important
+		}
+
+		.sms.label:before {
+			border-left-color: #00CC66 !important
+		}
+
+		.call.label:before {
+			border-left-color: #333333 !important
+		}
+
+	
+	</style>
+</head>
+
+
+<body>
+	@await Html.PartialAsync("_P_Header")
+	<div>
+		@RenderBody()
+	</div>
+	
+	@await Html.PartialAsync("_P_Footer")
+	<!-- Scroll to Top Button -->
+	<a href="#" id="scrollToTop" style="display: none;">
+		<span class="lnr lnr-arrow-up"></span>
+	</a>
+
+	<script>
+
+		document.addEventListener("DOMContentLoaded", function () {
+			let scrollToTopBtn = document.getElementById("scrollToTop");
+
+			// Hiển thị hoặc ẩn nút khi cuộn
+			window.addEventListener("scroll", function () {
+				if (window.scrollY > 100) {
+					scrollToTopBtn.style.display = "flex";
+				} else {
+					scrollToTopBtn.style.display = "none";
+				}
+			});
+
+			// Sự kiện khi nhấn vào nút
+			scrollToTopBtn.addEventListener("click", function (event) {
+				event.preventDefault();
+				window.scrollTo({
+					top: 0,
+					behavior: "smooth"
+				});
+			});
+		});
+
+				(function () {
+			let chatContainer = document.createElement("div");
+			chatContainer.id = "tnContactContainer";
+			chatContainer.innerHTML = `
+				<button id="toggleBtn">📞</button>
+				<ul id="tnContact" class="hidden">
+					<li>
+						<a href="https://messenger.com/t/temnerhome" class="iconfb" target="_blank">
+							<i class="fab fa-facebook-f"></i>
+							<span class="label fb">Chat Facebook</span>
+						</a>
+					</li>
+					<li>
+						<a href="https://zalo.me/0363053597" class="iconzalo" target="_blank">
+							<img src="https://caohungphat.com/wp-content/uploads/2019/07/icon_zalomessage.png" alt="" style="width: 24px; height: 24px;">
+							<span class="label zalo">Nhắn tin Zalo</span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="tel:0363053957" class="iconcall">
+							<i class="fas fa-phone"></i>
+							<span class="label call">Gọi điện thoại</span>
+						</a>
+					</li>
+				</ul>
+			`;
+			document.body.appendChild(chatContainer);
+
+			document.getElementById("toggleBtn").addEventListener("click", function () {
+				let contactList = document.getElementById("tnContact");
+				contactList.classList.toggle("hidden");
+				this.innerHTML = contactList.classList.contains("hidden") ? "📞" : "✖";
+			});
+
+		})();
+	</script>
+
+	<script src="~/js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+			crossorigin="anonymous"></script>
+	<script src="~/js/vendor/bootstrap.min.js"></script>
+	<script src="~/js/jquery.ajaxchimp.min.js"></script>
+	<script src="~/js/jquery.nice-select.min.js"></script>
+	<script src="~/js/jquery.sticky.js"></script>
+	<script src="~/js/nouislider.min.js"></script>
+	<script src="~/js/countdown.js"></script>
+	<script src="~/js/jquery.magnific-popup.min.js"></script>
+	<script src="~/js/owl.carousel.min.js"></script>
+
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="~/js/gmaps.min.js"></script>
+	<script src="~/js/main.js"></script>
+
+
+
+
+
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

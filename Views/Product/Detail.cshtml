@@ -1,0 +1,623 @@
+﻿@model MyStore.myDTO.Product_Price_DTO
+@{
+	ViewData["Title"] = "Detail";
+	var listFilename = ViewBag.listFilename as List<string>;
+	var min_price_afterdis = ViewBag.min_price_afterdis;
+	var max_price_afterdis = ViewBag.max_price_afterdis;
+	var listSize = ViewBag.listSize as List<string>;
+
+}
+
+@section Styles {
+
+
+	<style>
+		#mainImageContainer {
+			transition: opacity 0.5s ease-in-out;
+			opacity: 0;
+			display: none;
+		}
+
+			#mainImageContainer.show {
+				opacity: 1;
+				display: block;
+			}
+
+		#thumbnailContainer .thumbnail img {
+			width: 80px;
+			height: 80px;
+			object-fit: cover;
+			cursor: pointer;
+			border: 2px solid transparent;
+		}
+
+			#thumbnailContainer .thumbnail img:hover {
+				border-color: red;
+			}
+
+
+		#mainImageContainer {
+			text-align: center;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			min-width: 300px;
+			min-height: 300px;
+			max-width: 450px;
+			max-height: 500px;
+		}
+
+			#mainImageContainer img {
+				max-width: 90%;
+				max-height: 90vh;
+				border-radius: 5px;
+			}
+	</style>
+}
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Trang Sản Phẩm Chi Tiết </h1>
+				<nav class="d-flex align-items-center">
+					<a href="index.html">Trang chủ<span class="lnr lnr-arrow-right"></span></a>
+					<a href="#">Cửa hàng<span class="lnr lnr-arrow-right"></span></a>
+					<a href="single-product.html">Sản phẩm chi tiết</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+<!--================Single Product Area =================-->
+<div class="product_image_area">
+	<div class="container">
+		<div class="row s_product_inner">
+			<div class="col-lg-6">
+				<div class="s_Product_carousel">
+					@foreach (var item in listFilename)
+					{
+						<div class="single-prd-item">
+							<a class="zoom-wrapper">
+								<img src='~/Image/@item' alt="Giày, áo quần, đồng hồ chất lượng cao chính hãng tại bandathang.store" />
+							</a>
+						</div>
+					}
+				</div>
+
+			</div>
+			<div class="col-lg-5 offset-lg-1 ">
+				<div class="s_product_text">
+					<h3>@Model.Title</h3>
+					<h2 style="display: inline;" id="price_ajax">
+						@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} ₫", min_price_afterdis) -
+						@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} ₫", max_price_afterdis)
+					</h2>
+
+					<s id="tag_wait_ajax"></s>
+
+					<div>
+						<a href="#" data-toggle="modal" data-target="#sizeModal">
+							<i class="fas fa-file"></i>
+							Xem bảng size
+						</a>
+					</div>
+					<div class="text-danger font-weight-bold mb-2">
+						Hàng chất lượng, Fullbox, Cam kết 100% chính hãng, Phát hiện hàng giả xin đền 10 lần tiền.
+					</div>
+					<div class="font-weight-bold mb-2">
+						Miễn phí đổi size | đổi mẫu trong 1 tuần !!!
+					</div>
+					<div class="text-primary font-weight-bold">
+						Showroom : Khu phố 5, Trảng Dài, Biên Hòa, Đồng Nai
+					</div>
+
+					<!-- Modal -->
+					<div class="modal fade" id="sizeModal" tabindex="-1" role="dialog" aria-labelledby="sizeModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="sizeModalLabel">Bảng Size</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								@if (Model.CategoryId == 1)
+								{
+								}
+								<div class="modal-body text-center">
+									<!-- Ảnh bảng size -->
+									@if (Model.CategoryId == 1)
+									{
+										<img src="~/Image/bangsizegiaynew.png" class="img-fluid" alt="Bảng size">
+									}
+									else if (Model.CategoryId == 2)
+									{
+										<img src="~/Image/bangsizeao.png" class="img-fluid" alt="Bảng size">
+
+									}
+									else
+									{
+										<img src="~/Image/bangsizedongho.png" class="img-fluid" alt="Bảng size">
+
+									}
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="size-wrap">
+						<div class="block-26 mb-1">
+							<h4 class="font-weight-bold">Size</h4>
+							<ul>
+								@foreach (var item in listSize)
+								{
+									<li><a onclick="getProductPrice(@Model.ProductId,@item)">@item</a></li>
+								}
+
+							</ul>
+						</div>
+					</div>
+					<div>
+						<h6 class="font-weight-bold">Số Lượng :</h6>
+					</div>
+					<div class="product_count">
+
+						<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
+						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+								class="increase items-count" type="button">
+							<i class="lnr lnr-chevron-up"></i>
+						</button>
+						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+								class="reduced items-count" type="button">
+							<i class="lnr lnr-chevron-down"></i>
+						</button>
+					</div>
+					<div class="card_area d-flex align-items-center">
+						<a class="primary-btn" href="#">Thêm vào giỏ hàng</a>
+						<a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
+						<a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--================End Single Product Area =================-->
+<!--================Product Description Area =================-->
+<section class="product_description_area">
+	<div class="container">
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Mô Tả</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+				   aria-selected="false">Thông Số Sản Phẩm</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" onclick="loadFeedbacks(@Model.ProductId,1, 0 );loadRating(@Model.ProductId)" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+				   aria-selected="false">Đánh Giá </a>
+			</li>
+
+		</ul>
+		<div class="tab-content" id="myTabContent">
+
+			<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+				<p>
+					@Html.Raw(Model.Description)
+				</p>
+
+			</div>
+			<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+				<div class="table-responsive">
+					<table class="table">
+						<tbody>
+							<tr>
+								<td>
+									<h5>Trọng Lượng </h5>
+								</td>
+								<td>
+									<h5>@Model.Weight</h5>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h5>Loại Sản Phẩm </h5>
+								</td>
+								<td>
+									<h5>@Model.CategoryName</h5>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h5>Nhà Cung Cấp</h5>
+								</td>
+								<td>
+									<h5>@Model.SupplierName</h5>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h5>Màu Sắc </h5>
+								</td>
+								<td>
+									<h5>@Model.Color</h5>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h5>Chất Liệu Sản Xuất</h5>
+								</td>
+								<td>
+									<h5>@Model.Material</h5>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h5>Ngày Sản Xuất</h5>
+								</td>
+								<td>
+									<h5>@Model.ManufactureDate</h5>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h5>Xuất Xứ</h5>
+								</td>
+								<td>
+									<h5>@Model.CountryOfOrigin</h5>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h5>Thời Gian Bảo Hành </h5>
+								</td>
+								<td>
+									<h5>@Model.WarrantyPeriod</h5>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tab-pane fade " id="contact" role="tabpanel" aria-labelledby="contact-tab">
+				<div class="row total_rate  rating-container">
+					<div class="col-6">
+						<div class="box_total mb-3">
+							<h5 id="scrollfeedback">Đánh Giá </h5>
+							<h4 id="rating"> 4.8 <i class="fa fa-star "></i> </h4>
+
+							<h6 id="total-reviews">(03 Reviews)</h6>
+						</div>
+					</div>
+					<div class="col-6">
+
+						<div class="button-group-area">
+							<a id="All" style="width:150px" onclick="loadFeedbacks(@Model.ProductId, 1, 0)" class="genric-btn warning-border">Tất cả(11.0k)</a>
+							<a id="5_star" style="width:150px" onclick="loadFeedbacks( @Model.ProductId,1, 5)" class="genric-btn warning-border">5 Sao(4.3k)</a>
+							<a id="4_star" style="width:150px" onclick="loadFeedbacks( @Model.ProductId,1, 4)" class="genric-btn warning-border">4 Sao(3.3k)</a>
+							<a id="3_star" style="width:150px" onclick="loadFeedbacks( @Model.ProductId,1, 3)" class="genric-btn warning-border">3 Sao(2.4k)</a>
+							<a id="2_star" style="width:150px" onclick="loadFeedbacks(@Model.ProductId, 1, 2)" class="genric-btn warning-border">2 Sao(1.2k)</a>
+							<a id="1_star" style="width:150px" onclick="loadFeedbacks( @Model.ProductId,1, 1)" class="genric-btn warning-border">1 Sao(241)</a>
+
+						</div>
+						<div class="button-group-area">
+							<a id="a_star" style="width:150px" onclick="loadFeedbacks(@Model.ProductId, 1, 6)" class="genric-btn warning-border">Ảnh (11k)</a>
+
+						</div>
+					</div>
+
+
+				</div>
+				<div class="row p-5">
+					<div class="col-lg-12">
+						<div class="comment_list">
+							<!-- phần của ajax -->
+
+						</div>
+						<div id="pagination" class="pagination justify-content-center"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+</section>
+
+<!--================End Product Description Area =================-->
+<!-- Start related-product Area -->
+<section class="related-product-area section_gap_bottom">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 text-center">
+				<div class="section-title">
+					<h1>Những Sản Phẩm Cùng Loại Có Thể Bạn Thích </h1>
+					<p>
+						"Những sản phẩm cùng loại có thể bạn thích – Chọn ngay để khám phá thêm những lựa chọn hoàn hảo dành cho bạn!" 💖🛍️
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-9">
+				<div class="row">
+					@await Component.InvokeAsync("SameCategoryVC", new { categoryId = Model.CategoryId, productId = Model.ProductId })
+
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="ctg-right">
+					<a href="#" target="_blank">
+						<img class="img-fluid d-block mx-auto" src="~/img/category/c5.jpg" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+
+
+
+@section Scripts
+{
+
+
+	<script>
+
+
+		// ajax rationg count
+			function loadRating(productId) {
+				$.ajax({
+					url: "/Product/GetRating",
+					type: "GET",
+					data: { productId: productId },
+					success: function (response) {
+						if (response.success) {
+												$("#rating").html(response.rating + ' <i class="fa fa-star"></i>');
+												$("#All").html('Tất cả ('+response.totalReviews+')');
+												$("#1_star").html('1 Sao ('+response.oneStar+')');
+												$("#2_star").html('2 Sao ('+response.twoStars+')');
+												$("#3_star").html('3 Sao ('+response.threeStars+')');
+												$("#4_star").html('4 Sao ('+response.fourStars+')');
+												$("#5_star").html('5 Sao ('+response.fiveStars+')');
+												$("#a_star").html('Ảnh ('+response.fiveStars+')');
+								$("#total-reviews").text('(' + response.totalReviews + ' Đánh giá)');
+						}
+					},
+					error: function () {
+						console.error("Failed to load rating data.");
+					}
+				});
+			}
+
+
+
+			// ajax feedback
+
+
+				let currentPage = 1;
+				let pageSize = 5;
+				let fillter = 0 ;
+				function loadFeedbacks(productId,page = 1, fillter ) {
+				// cuộn lên
+						scrollToElement("scrollfeedback");
+				$.ajax({
+					url: "/Product/GetFeedbacks",
+					type: "GET",
+							data: {productId:productId, page: page, pageSize: pageSize,fillter:fillter }, // Gửi thông tin phân trang lên server
+					success: function (response) {
+						console.log("AJAX gọi thành công");
+						if (response.success) {
+
+							let html = "";
+
+							response.data.forEach(feedback => {
+								let stars = "";
+								for (let i = 0; i < feedback.star; i++) {
+									stars += `<i class="fa fa-star text-warning"></i>`;
+								}
+
+								html += `<div class="review_item">
+											<div class="media">
+												<div class="d-flex">
+													<img style="width: 60px; height: 60px; object-fit: cover;border-radius: 50%" src="/Image/${feedback.filenameuser}" alt="">
+												</div>
+												<div class="media-body">
+													<h4>${feedback.fullname}</h4>
+													<h5>${new Date(feedback.createdAt).toLocaleString()}</h5>
+													<ul class="list-inline">${stars}</ul>
+												</div>
+											</div>
+											<p>${feedback.note}</p>
+										</div>`;
+
+								// Hiển thị hình ảnh nếu có
+								if (feedback.filenames && feedback.filenames.length > 0) {
+									html += `<div class="container mt-4">
+												<div class="row justify-content-center">
+													<div class="col-12 text-center">
+														<div id="thumbnailContainer" class="d-flex justify-content-left">`;
+
+									html += feedback.filenames.map(file => `
+										<button class="btn p-0 thumbnail m-1" onclick="showLargeImage('~/Image/${file}')">
+											<img src="/Image/${file}" class="img-thumbnail">
+										</button>
+									`).join('');
+									html += `        </div>
+													</div>
+													<div class="col-12">
+														<div id="mainImageContainer" class="collapse">
+															<img id="largeImage" src="/img/ob1.jpg" class="img-fluid">
+														</div>
+													</div>
+												</div>
+											</div>`;
+								}
+
+								// Hiển thị phản hồi từ Admin nếu có
+								if (feedback.noterely != null && feedback.noterely != "") {
+									html += `<div class="review_item reply">
+												<div class="media">
+													<div class="d-flex">
+													<img style="width: 60px; height: 60px; object-fit: cover;border-radius: 50%" src="/Image/${feedback.filenameuserrely}" alt="">
+													</div>
+													<div class="media-body">
+														<h4>${feedback.fullnamerely || 'Admin'}</h4>
+													</div>
+												</div>
+												<p>${feedback.noterely || ''}</p>
+											</div>`;
+								}
+							});
+
+
+							$(".comment_list").html(html);
+							initializeThumbnailClickHandler();
+								  // Hiển thị phân trang
+							renderPagination(response.totalRecords, response.pageSize, response.currentPage, response.fillter, response.productId);
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function () {
+						alert("Lỗi không xác định khi tải dữ liệu.");
+					}
+				});
+			}
+
+			function renderPagination(totalRecords, pageSize, currentPage, fillter,productId) {
+				let totalPages = Math.ceil(totalRecords / pageSize);
+				let paginationHTML = `<div class="pagination">`;
+
+				// Nút "Trước"
+				if (currentPage > 1) {
+									paginationHTML += `<a  class="prev-arrow" onclick="loadFeedbacks(${productId},${currentPage - 1},${fillter})">
+						<i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+					</a>`;
+				}
+
+				// Hiển thị số trang
+				let maxPagesToShow = 5;
+				let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+				let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+				if (startPage > 1) {
+								paginationHTML += `<a  onclick="loadFeedbacks(${productId},1,${fillter})">1</a>`;
+					if (startPage > 2) {
+						paginationHTML += `<a  class="dot-dot"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>`;
+					}
+				}
+
+				for (let i = startPage; i <= endPage; i++) {
+								paginationHTML += `<a  onclick="loadFeedbacks(${productId},${i},${fillter})" class="${i === currentPage ? "active" : ""}">${i}</a>`;
+				}
+
+				if (endPage < totalPages) {
+					if (endPage < totalPages - 1) {
+						paginationHTML += `<a  class="dot-dot"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>`;
+					}
+								paginationHTML += `<a  onclick="loadFeedbacks(${productId},${totalPages},${fillter})">${totalPages}</a>`;
+				}
+
+				// Nút "Sau"
+				if (currentPage < totalPages) {
+								paginationHTML += `<a  class="next-arrow" onclick="loadFeedbacks(${productId},${currentPage + 1},${fillter})">
+						<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+					</a>`;
+				}
+
+				paginationHTML += `</div>`;
+				$("#pagination").html(paginationHTML);
+			}
+
+
+				// scorll for feedback
+				function scrollToElement(elementId) {
+				$('html, body').animate({
+					scrollTop: $("#" + elementId).offset().top
+				}, 800); // 800ms để mượt mà
+			}
+
+
+
+
+
+
+
+
+
+			function getProductPrice(productId, sizename)
+			 {
+				$.ajax({
+					url: "/Product/GetPrice",
+					type: "GET",
+					data: { id: productId, sizename: sizename },
+					success: function (response)
+					{
+						if (response.success) {
+
+									if (response.discount==0)
+									{
+
+											$("#price_ajax").html(new Intl.NumberFormat('vi-VN').format(response.price) + " ₫");
+											$("#tag_wait_ajax").html("");
+
+								}else
+								{
+
+
+									 // Tính toán giá sau khi giảm và định dạng số
+										let discountedPrice = response.price - (response.price * response.discount);
+										let formattedDiscountedPrice = new Intl.NumberFormat('vi-VN').format(discountedPrice) + " đ";
+										let formattedOriginalPrice = new Intl.NumberFormat('vi-VN').format(response.price) + " đ";
+
+										// Gán giá trị vào các phần tử HTML
+										$("#price_ajax").html(formattedDiscountedPrice);
+										$("#tag_wait_ajax").html("<h4 style='color: gray;'>" + formattedOriginalPrice + "</h4>");
+
+								}
+
+						} else {
+							alert("Không tìm thấy giá!");
+						}
+					},
+					error: function ()
+					{
+						alert("Có lỗi xảy ra, vui lòng thử lại!");
+					}
+				});
+			}
+
+
+			function initializeThumbnailClickHandler()
+			{
+			let currentThumbnail = null;
+			$('#thumbnailContainer .thumbnail').click(function () {
+				let imgSrc = $(this).find('img').attr('src');
+
+				if (currentThumbnail === this) {
+					$('#mainImageContainer').collapse('hide');
+					currentThumbnail = null;
+				} else {
+					$('#largeImage').attr('src', imgSrc);
+					$('#mainImageContainer').collapse('show');
+					currentThumbnail = this;
+				}
+			});
+
+			$('#mainImageContainer').on('hidden.bs.collapse', function () {
+				currentThumbnail = null;
+			});
+		}
+
+
+
+		$(document).ready(initializeThumbnailClickHandler);
+
+	</script>
+}
+

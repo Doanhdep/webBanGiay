@@ -1,0 +1,282 @@
+﻿
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+        }
+        .close {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .stars {
+            display: flex;
+            gap: 5px;
+        }
+        .stars span {
+            font-size: 40px;
+            cursor: pointer;
+            color: #ccc;
+        }
+        .stars span.selected { color: #FFA500; }
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .button {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #FF4500;
+            background: none;
+            color: #FF4500;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+        .button:hover { background-color: #FF4500; color: white; }
+    </style>
+<div id="reviewModal" class="modal" data-productPriceId="">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Đánh giá sản phẩm</h2>
+        <div class="stars">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+        </div>
+        <textarea id="feedbackNote" placeholder="Nhập đánh giá của bạn..." style="width: 100%; height: 120px; margin-top: 10px;"></textarea>
+        <div id="imagePreviewContainer"></div>
+        <!-- Input file bị ẩn và nút để mở nó -->
+        <input type="file" id="imageUpload" multiple accept="image/*" style="display: none;">
+        <button id="openFilePicker" class="button">📷 Chọn Hình ảnh</button>
+        <button class="button" id="submitFeedback" style="background-color: #FF4500; color: white; width: 100%; margin-top: 10px;">Gửi Đánh Giá</button>
+    </div>
+</div>
+<style>
+    #imagePreviewContainer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .image-preview {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .remove-image {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 12px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+    <script>
+    const modal = document.getElementById("reviewModal");
+    const closeBtn = document.querySelector(".close");
+    const openBtns = document.querySelectorAll(".openModal");
+    const stars = document.querySelectorAll(".star");
+    const modalTitle = modal.querySelector("h2"); // Lấy tiêu đề của modal
+    // Hàm khi mở modal đánh giá và gán productPriceId
+    function openReviewModal(productPriceId, productTitle) {
+        const reviewModal = document.getElementById("reviewModal");
+        const modalTitle = reviewModal.querySelector("h2");
+
+        reviewModal.dataset.productPriceId = productPriceId; // Gán ID sản phẩm vào modal
+        modalTitle.textContent = "Đánh giá sản phẩm: " + productTitle; // Hiển thị tên sản phẩm
+        reviewModal.style.display = "block"; // Hiển thị modal
+    }
+    //hàm mở model
+    openBtns.forEach(button => {
+        button.addEventListener("click", () => {
+            const productPriceId = button.getAttribute("data-productPriceId"); // Lấy ID sản phẩm
+            const productTitle = button.getAttribute("data-title"); // Lấy tên sản phẩm
+
+            if (!productPriceId) {
+                alert("Không tìm thấy sản phẩm để đánh giá!");
+                return;
+            }
+
+            openReviewModal(productPriceId, productTitle);
+        });
+    });
+    //click dấu x thì đóng model
+    closeBtn.onclick = function () {
+        modal.style.display = "none";
+    };
+    //click ngoài thì đóng model
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+    // Xử lý chọn sao
+    stars.forEach((star, index) => {
+        star.addEventListener("click", () => {
+            stars.forEach((s, i) => {
+                s.classList.toggle("selected", i <= index);
+            });
+        });
+    });
+
+    //gửi feedback
+    document.getElementById("submitFeedback").addEventListener("click", async function () {
+        const note = document.getElementById("feedbackNote").value.trim();
+        const reviewModal = document.getElementById("reviewModal");
+        const productPriceId = reviewModal.dataset.productPriceId;
+        const selectedStars = document.querySelectorAll(".star.selected").length;
+        const userId = 1;
+        const parentId = 0;
+
+        if (!note) {
+            alert("Vui lòng nhập nội dung đánh giá!");
+            return;
+        }
+
+        if (!productPriceId) {
+            alert("Không tìm thấy sản phẩm để đánh giá!");
+            return;
+        }
+
+        if (selectedStars === 0) {
+            alert("Vui lòng chọn số sao đánh giá!");
+            return;
+        }
+
+        // Tạo FormData để gửi dữ liệu
+        const formData = new FormData();
+        formData.append("note", note);
+        formData.append("star", selectedStars);
+        formData.append("userId", userId);
+        formData.append("productPriceId", productPriceId);
+        formData.append("parentId", parentId);
+
+        // 🔥 Thêm tất cả ảnh từ selectedImages vào formData
+        for (let i = 0; i < selectedImages.length; i++) {
+            formData.append("images", selectedImages[i]);
+            console.log(`Thêm ảnh: ${selectedImages[i].name}`); // Log để kiểm tra
+        }
+
+        try {
+            const response = await fetch("/OrderStatus/PostFeedback", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("Gửi đánh giá thành công!");
+                document.getElementById("reviewModal").style.display = "none";
+                selectedImages = []; // Xóa danh sách ảnh sau khi gửi
+                document.getElementById("imagePreviewContainer").innerHTML = ""; // Xóa ảnh hiển thị
+            } else {
+                const result = await response.json();
+                alert(result.message || "Có lỗi xảy ra, vui lòng thử lại!");
+            }
+        } catch (error) {
+            console.error("Lỗi:", error);
+            alert("Lỗi kết nối đến server!");
+        }
+    });
+
+
+
+    //hàm để chọn ảnh 
+    document.getElementById("openFilePicker").addEventListener("click", function () {
+        document.getElementById("imageUpload").click();
+    });
+    let selectedImages = []; // Mảng lưu ảnh đã chọn
+
+    document.getElementById("imageUpload").addEventListener("change", function () {
+        let files = Array.from(this.files); // Lấy danh sách file mới
+        let previewContainer = document.getElementById("imagePreviewContainer");
+
+        files.forEach(file => {
+            if (!file.type.startsWith("image/")) {
+                alert("Chỉ được chọn tệp hình ảnh!");
+                return;
+            }
+
+            // Kiểm tra trùng ảnh
+            if (selectedImages.some(img => img.name === file.name)) {
+                alert(`Ảnh ${file.name} đã được chọn!`);
+                return;
+            }
+
+            selectedImages.push(file); // Lưu vào danh sách đã chọn
+            console.log("Danh sách ảnh hiện tại:", selectedImages.map(img => img.name));
+
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                let imageWrapper = document.createElement("div");
+                imageWrapper.classList.add("image-preview");
+
+                let img = document.createElement("img");
+                img.src = e.target.result;
+
+                let removeBtn = document.createElement("button");
+                removeBtn.classList.add("remove-image");
+                removeBtn.innerHTML = "×";
+                removeBtn.addEventListener("click", function () {
+                    previewContainer.removeChild(imageWrapper);
+                    selectedImages = selectedImages.filter(img => img.name !== file.name); // Xóa ảnh khỏi mảng
+                    console.log("Danh sách ảnh sau khi xóa:", selectedImages.map(img => img.name));
+                });
+
+                imageWrapper.appendChild(img);
+                imageWrapper.appendChild(removeBtn);
+                previewContainer.appendChild(imageWrapper);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        console.log("Tổng số ảnh đã chọn:", selectedImages.length);
+    });
+
+
+
+
+
+    
+    </script>
+
+

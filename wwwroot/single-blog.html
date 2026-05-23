@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Gallery Bootstrap 4 - Collapse</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+ 
+</head>
+<body>
+
+    <img id="zoom_01" src='./Image/46SMA0045-02H.jpg' data-zoom-image="./Image/46SMA0045-02H.jpg" />
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js'></script>
+
+    <script>
+        //<![CDATA[
+
+
+        window.addEventListener('load', function () {
+
+            $("#zoom_01").elevateZoom({
+
+                scrollZoom: true
+
+            });
+
+        })
+
+        //]]>
+    </script>
+
+</body>
+</html>

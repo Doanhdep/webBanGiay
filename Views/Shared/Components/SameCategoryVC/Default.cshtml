@@ -1,0 +1,33 @@
+﻿ @model IEnumerable< MyStore.myDTO.Same_Category_DTO>
+@if (Model != null && Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+            <div class="single-related-product d-flex">
+                <a asp-action="Detail" asp-controller="Product" asp-route-productid="@item.ProductId">
+                    <img src="~/Image/@item.filename" alt="@item.Title" style="width: 80px; height: 80px;" />
+                </a>
+                <div class="desc">
+                    <a  asp-action="Detail" asp-controller="Product" asp-route-productid="@item.ProductId" class="title">
+                        @(item.Title.Length > 14 ? item.Title.Substring(0, 14) + "..." : item.Title)
+                    </a>
+
+                    <div class="price">
+                        <h6>
+                            @String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} ₫", item.Price)
+                        </h6>
+                        @if (item.Discount > 0)
+                        {
+                            <h6 class="l-through">
+                                @String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} ₫", (item.Price * (1 + item.Discount)))
+
+                            </h6>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Xác Nhận OTP";
+}
+
+<h2>Xác Nhận OTP</h2>
+
+<form id="verifyOtpForm">
+    <label for="otp">Nhập mã OTP:</label>
+    <input type="text" id="otp" name="otp" required>
+    <button type="submit">Xác nhận</button>
+</form>
+
+<p id="message"></p>
+
+<script>
+    document.getElementById("verifyOtpForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var otp = document.getElementById("otp").value;
+
+        fetch("/Account/CheckOTP", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ otp: otp })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("message").innerText = data.message;
+            if (data.success) {
+                window.location.href = "/Account/ResetPassword";
+            }
+        });
+    });
+</script>

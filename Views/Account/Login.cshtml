@@ -1,0 +1,157 @@
+﻿@model MyStore.myDTO.Login_DTO
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Login/Register</h1>
+                <nav class="d-flex align-items-center">
+                    <a asp-controller="Home" asp-action="Index">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a asp-controller="Account" asp-action="Login">Login/Register</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Login Box -->
+<section class="login_box_area section_gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <img class="img-fluid" src="~/img/login.jpg" alt="Login Image">
+                    <div class="hover">
+                        <h4>Bạn mới đến với trang web của chúng tôi?</h4>
+                        <p>Có những tiến bộ đang được thực hiện trong khoa học và công nghệ mỗi ngày.</p>
+                        <a class="primary-btn" asp-controller="Account" asp-action="Register">Tạo tài khoản</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="login_form_inner">
+                    <h3>Đăng nhập</h3>
+                    <form class="row login_form" asp-controller="Account" asp-action="Login" method="post" id="loginForm">
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+                        <div class="col-md-12 form-group">
+                            <input asp-for="Username" type="text" class="form-control" placeholder="Tên tài khoản">
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+
+                        <!-- Ô nhập mật khẩu có nút con mắt -->
+                        <div class="col-md-12 form-group">
+                            <div class="input-group">
+                                <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Mật khẩu">
+                                <div class="input-group-append">
+                                    <span class="input-group-text toggle-password" id="togglePassword">👁️</span>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <div class="creat_account">
+                                <input asp-for="RememberMe" type="checkbox" id="rememberMe">
+                                <label for="rememberMe">Giữ đăng nhập</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <p class="error-message text-danger" style="display: none;"></p>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <button type="submit" class="primary-btn" style="border-radius: 6px">Đăng nhập</button>
+                            <a asp-controller="Account" asp-action="ForgotPassword">Quên mật khẩu?</a>
+                        </div>
+                    </form>
+
+                    <!-- Đăng nhập bằng Google và Facebook -->
+                    <div class="col-md-12 form-group d-flex justify-content-center">
+                        <a asp-controller="Account" asp-action="LoginByGoogle" id="google-signin" class="mr-2">
+                            <div class="button-wrapper">
+                                <div class="logo-box">
+                                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Login">
+                                </div>
+                                <span  class="text-box">Google</span>
+                            </div>
+                        </a>
+
+                        <a href="#" id="facebook-signin">
+                            <div class="button-wrapper">
+                                <div class="logo-box">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Login">
+                                </div>
+                                <span class="text-box">Facebook</span>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .toggle-password {
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+
+            .toggle-password:hover {
+                color: #007bff;
+            }
+    </style>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".login_form").submit(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("action"),
+                type: $(this).attr("method"),
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        $(".error-message").text(response.message).show();
+                    }
+                },
+                error: function () {
+                    $(".error-message").text("Đăng nhập thất bại!").show();
+                }
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordField = document.getElementById("password");
+
+        // Đặt icon phù hợp ngay khi trang load
+        togglePassword.innerHTML = passwordField.type === "password" ? "👁️" : "🙈";
+
+        togglePassword.addEventListener("click", function () {
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                togglePassword.innerHTML = "🙈"; // Đang hiển thị mật khẩu
+            } else {
+                passwordField.type = "password";
+                togglePassword.innerHTML = "👁️"; // Ẩn mật khẩu
+            }
+        });
+    });
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

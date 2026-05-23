@@ -1,0 +1,151 @@
+﻿@model IEnumerable<MyStore.myDTO.CartItem_DTO>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<style>
+    .nice-select {
+        line-height: 25px !important;
+    }
+
+</style>
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1> Giỏ Hàng </h1>
+                <nav class="d-flex align-items-center">
+                    <a href="index.html">Trang chủ <span class="lnr lnr-arrow-right"></span></a>
+                    <a href="category.html">Giỏ hàng </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!--================Cart Area =================-->
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sản Phẩm</th>
+                            <th scope="col">Size</th> <!-- Thêm cột Size -->
+                            <th scope="col">Giá Tiền</th>
+                            <th scope="col">Số Lượng</th>
+                            <th scope="col" style="width:140px">Tổng Tiền</th>
+                            <th scope="col">
+                                <input type="checkbox" id="primary-checkbox">
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="media">
+                                    <div class="d-flex">
+                                        <img src="img/cart.jpg" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <p>Minimalistic shop for multipurpose use</p>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td style="text-align: center;">
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    <select class="form-control" style="width: auto; text-align: center; padding-left: 10px; padding-right: 10px;">
+                                        <option>S</option>
+                                        <option>M</option>
+                                        <option>L</option>
+                                        <option>XL</option>
+                                    </select>
+                                </div>
+                            </td>
+
+                            
+                            <td>
+                                <h5>$360.00000000000000</h5>
+                            </td>
+                            <td>
+                                <div class="product_count">
+                                    <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
+                                           class="input-text qty">
+                                    <button onclick="var result = document.getElementById('sst'); var sst = result.value; if(!isNaN(sst)) result.value++;return false;"
+                                            class="increase items-count" type="button">
+                                        <i class="lnr lnr-chevron-up"></i>
+                                    </button>
+                                    <button onclick="var result = document.getElementById('sst'); var sst = result.value; if(!isNaN(sst) && sst > 0) result.value--;return false;"
+                                            class="reduced items-count" type="button">
+                                        <i class="lnr lnr-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                <h5>$720.00</h5>
+                            </td>
+                            <td>
+                                <input type="checkbox" id="primary-checkbox">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="input-group" style="width: 80%;">
+                                    <input class="form-control" type="text" placeholder="Thêm mã giảm giá" style="font-size: 16px;">
+                                    <button class="genric-btn primary radius">Thêm</button>
+                                </div>
+                            </td>
+                            <td></td> <!-- Cột Size trống -->
+                            <td></td>
+                            <td>
+                                <h5>Tổng Tiền Tất Cả</h5>
+                            </td>
+                            <td>
+                                <h5>$2160.00</h5>
+                            </td>
+                        </tr>
+
+                        <tr class="shipping_area">
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <h5>Vận chuyển</h5>
+                            </td>
+                            <td>
+                                <div class="shipping_box">
+                                    <ul class="list">
+                                        <li><a href="#">Flat Rate: $5.00</a></li>
+                                        <li><a href="#">Free Shipping</a></li>
+                                        <li><a href="#">Flat Rate: $10.00</a></li>
+                                        <li class="active"><a href="#">Local Delivery: $2.00</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="out_button_area">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <div class="checkout_btn_inner d-flex align-items-center">
+                                    <a class="gray_btn" href="#">Continue Shopping</a>
+                                    <a class="primary-btn" href="#">Proceed to checkout</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Cart Area =================-->
+

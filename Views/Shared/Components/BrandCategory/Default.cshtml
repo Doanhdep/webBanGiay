@@ -1,0 +1,20 @@
+﻿@model IEnumerable<MyStore.myDTO.Supplier_DTO>
+@{
+    int selectedSupplier = ViewBag.CurrentSupplier ?? 0;
+}
+<!-- Thêm input hidden để lưu giá trị supplier -->
+<input type="hidden" id="supplierSelect" value="@selectedSupplier" />
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li class="filter-list">
+            <input class="pixel-radio" type="radio" id="Supplier_@item.Id" name="brand"
+                   onclick="filterBySupplier(@item.Id)"
+            @(item.Id == selectedSupplier ? "checked" : "")>
+            <label for="Supplier_@item.Id">@item.Name (@item.coutSupplier)</label>
+        </li>
+    }
+</ul>
+
+

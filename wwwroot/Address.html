@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/fav.png">
+    <!-- Author Meta -->
+    <meta name="author" content="CodePixar">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>Karma Shop</title>
+
+    <!--
+			CSS
+			============================================= -->
+    <link rel="stylesheet" href="css/linearicons.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/owl.carousel.css">
+    <link rel="stylesheet" href="css/nice-select.css">
+    <link rel="stylesheet" href="css/nouislider.min.css">
+    <link rel="stylesheet" href="css/ion.rangeSlider.css" />
+    <link rel="stylesheet" href="css/ion.rangeSlider.skinFlat.css" />
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <!-- Modal -->
+    <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Address</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="fullName">Full Name:</label>
+                                <input type="text" class="form-control" id="fullName" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="phoneNumber">Phone Number:</label>
+                                <input type="text" class="form-control" id="phoneNumber" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="city">City:</label>
+                                <select class="form-control" id="tinh" required>
+                                    <option value="0">Select City</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="district">District:</label>
+                                <select class="form-control" id="quan" required>
+                                    <option value="0">Select District</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="ward">Ward:</label>
+                                <select class="form-control" id="phuong" required>
+                                    <option value="0">Select Ward</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="fullName">Street, Address Detail:</label>
+                            <input type="text" class="form-control" id="addressInput" required>
+                        </div>
+
+                        <div class="form-group">
+                            <div id="map" style="width: 100%; height: 250px;"></div>
+                        </div>
+                        <button type="button" class="btn btn-light w-100" onclick="fillCurrentLocation()">
+                            <i class="fas fa-map-marker-alt"></i> Add Location
+                        </button>
+
+                        <label class="mt-3">Label As:</label>
+                        <div class="btn-group d-flex" role="group">
+                            <button type="button" class="btn btn-outline-secondary flex-fill">Home</button>
+                            <button type="button" class="btn btn-outline-secondary flex-fill">Work</button>
+                        </div>
+                        <label>Checkbox Set as Default Address</label>
+                        <div class="form-check mt-3">
+                            <input type="checkbox" class="form-check-input" id="defaultAddress">
+                            <label class="form-check-label" for="defaultAddress">Set as Default Address</label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>My Addresses</h2>
+            <a  data-toggle="modal" data-target="#addressModal" class="genric-btn primary font-weight-bold" style="font-size:15px">+ Add New Address</a>
+        </div>
+        <hr />
+        <div class="list-group">
+            <div class="list-group-item">
+                <h5>nguyen van a</h5>
+                <p>(+84) 398 434 001</p>
+                <p>Đường Phạm Văn Đồng, Phường Tân Biên, Thành Phố Biên Hòa, Đồng Nai</p>
+                <span class="badge badge-success">Default</span>
+                <div class="mt-2">
+                    <button class="btn btn-secondary btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                    <button class="btn btn-sm btn-default">Set as default</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+
+    <script src="js/vendor/jquery-2.2.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+            crossorigin="anonymous"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/jquery.ajaxchimp.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/nouislider.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <!--gmaps Js-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+    <script src="js/gmaps.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // Get list of provinces
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data) {
+                if (data.error === 0) {
+                    $.each(data.data, function (key, province) {
+                        $("#tinh").append('<option value="' + province.id + '">' + province.full_name + '</option>');
+                    });
+                }
+            }).fail(function () {
+                alert("Unable to fetch province list.");
+            });
+
+            // On province selection
+            $("#tinh").change(function () {
+                var provinceId = $(this).val();
+                $("#quan").html('<option value="0">District</option>');
+                $("#phuong").html('<option value="0">Ward</option>');
+
+                if (provinceId > 0) {
+                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm', function (data) {
+                        if (data.error === 0) {
+                            $.each(data.data, function (key, district) {
+                                $("#quan").append('<option value="' + district.id + '">' + district.full_name + '</option>');
+                            });
+                        }
+                    }).fail(function () {
+                        alert("Unable to fetch district list.");
+                    });
+                }
+            });
+
+            // On district selection
+            $("#quan").change(function () {
+                var districtId = $(this).val();
+                $("#phuong").html('<option value="0">Ward</option>');
+
+                if (districtId > 0) {
+                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm', function (data) {
+                        if (data.error === 0) {
+                            $.each(data.data, function (key, ward) {
+                                $("#phuong").append('<option value="' + ward.id + '">' + ward.full_name + '</option>');
+                            });
+                        }
+                    }).fail(function () {
+                        alert("Unable to fetch ward list.");
+                    });
+                }
+            });
+
+            
+        });
+
+
+    </script>
+</body>
+
+</html>

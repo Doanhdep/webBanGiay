@@ -1,0 +1,72 @@
+﻿@model IEnumerable<MyStore.myDTO.Product_DTO>
+
+<!-- single product -->
+@foreach (var item in Model)
+{
+    <div class="col-lg-4 col-md-6">
+        <div class="single-product">
+            <img class="img-fluid product-img"
+                 src="@Url.Content($"~/Image/{item.Filename}")"
+                 data-hover="@Url.Content($"~/Image/{item.Filename2}")"
+                 alt="">
+
+
+            <div class="product-details">
+                <h6>
+                    @item.Title
+                </h6>
+                <div class="rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+
+                        if (item.Rating >= i)
+                        {
+                            <i class="fa fa-star rating-star"></i> <!-- Sao đầy -->
+                        }
+                        else if (item.Rating >= i - 0.5)
+                        {
+                            <i class="fa fa-star-half-o rating-star"></i> <!-- Nửa sao -->
+                        }
+                        else
+                        {
+                            <i class="fa fa-star-o rating-star"></i> <!-- Sao trống -->
+                        }
+                    }
+                </div>
+                <div class="price">
+                    <h6>
+                        @String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} ₫", item.Price_Default)
+                    </h6>
+                </div>
+                <div class="prd-bottom">
+                    <a href="" class="social-info">
+                        <span class="ti-bag"></span>
+                        <p class="hover-text">Thêm giỏ hàng </p>
+                    </a>
+                    <a href="" class="social-info">
+                        <span class="lnr lnr-heart"></span>
+                        <p class="hover-text">Yêu Thích</p>
+                    </a>
+                    <a asp-action="Detail" asp-controller="Product" asp-route-ProductId="@item.Id" class="social-info">
+                        <span class="lnr lnr-move"></span>
+                        <p class="hover-text">Chi Tiết</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        $(".product-img").hover(
+            function () {
+                var newSrc = $(this).data("hover");
+                $(this).attr("src", newSrc);
+            },
+            function () {
+                var originalSrc = $(this).attr("data-hover").replace("_1", "");
+                $(this).attr("src", originalSrc);
+            }
+        );
+    });
+</script>

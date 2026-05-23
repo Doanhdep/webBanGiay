@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao diện đơn hàng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .filter-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .filter-tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+            .filter-tab.active {
+                border-bottom: 2px solid #ee4d2d;
+                color: #ee4d2d;
+                font-weight: bold;
+            }
+
+        .order-card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .product-info {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            background-color: #f5f5f5;
+            margin-right: 15px;
+        }
+
+        .product-details {
+            flex-grow: 1;
+        }
+
+        .product-name {
+            margin-bottom: 5px;
+        }
+
+        .product-variant {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .product-actions {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .checkbox {
+            margin-right: 10px;
+        }
+
+        .action-button {
+            margin-right: 10px;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background: none;
+            cursor: pointer;
+        }
+
+        .price-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .final-price {
+            color: #ee4d2d;
+            font-weight: bold;
+        }
+
+        .total-price {
+            text-align: right;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .order-status {
+            color: #ee4d2d;
+            margin: 10px 0;
+        }
+
+        .cancel-reason {
+            color: #666;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .shop-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        .footer-button {
+            margin-left: 10px;
+            padding: 5px 15px;
+            border: 1px solid #ddd;
+            background: none;
+            cursor: pointer;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px dashed #ddd;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="filter-tabs">
+        <div class="filter-tab active">Tất cả</div>
+        <div class="filter-tab">Chờ thanh toán</div>
+        <div class="filter-tab">Vận chuyển</div>
+        <div class="filter-tab">Chờ giao hàng</div>
+        <div class="filter-tab">Hoàn thành</div>
+        <div class="filter-tab">Đã hủy</div>
+        <div class="filter-tab">Trả hàng/Hoàn tiền</div>
+    </div>
+
+   
+
+
+    <!-- Đơn hàng 3 -->
+    <div class="order-card">
+        <div class="shop-header">
+            <span>YOTAFOOD</span>
+        </div>
+
+        <div class="product-info">
+            <div class="product-image"></div>
+            <div class="product-details">
+                <div class="product-name">1Kg Khô Heo Cháy Tỏi (Thơm ngon - đậm vị) đồ ăn vặt từ Yotafood x1</div>
+                <div class="product-actions">
+                    <input type="checkbox" class="checkbox">
+                    <button class="action-button">ĐÁNH GIÁ</button>
+                </div>
+            </div>
+        </div>
+        <div class="price-section">
+            <span class="original-price">4.960.000</span>
+            <span class="final-price">816.000</span>
+        </div>
+
+        <div class="total-price">Thành tiền: 1.166.000</div>  
+
+        <div class="shop-footer">
+            <button class="footer-button">Xem Chi Đơn</button>
+            <button class="footer-button">Liên Hệ Người Bán</button>
+        </div>
+    </div>
+</body>
+</html>

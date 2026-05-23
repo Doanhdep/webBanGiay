@@ -1,0 +1,144 @@
+﻿@model MyStore.myDTO.Register_DTO
+@{
+	ViewData["Title"] = "Register";
+
+
+
+}
+
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Login/Register</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="category.html">Login/Register</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!--================Login Box Area =================-->
+<section class="login_box_area section_gap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <img class="img-fluid" src="~/img/login.jpg" alt="">
+                    <div class="hover">
+                        <h4>
+                            "Bạn mới sử dụng trang web của chúng tôi?"
+
+                        </h4>
+                        <p>"Công nghệ và khoa học đang phát triển từng ngày, và đây là một ví dụ điển hình!"</p>
+                        <a class="primary-btn" href="registration.html">Đăng Nhập Ngay</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login_form_inner">
+                    <h3>Register</h3>
+
+                    <!-- Register Form -->
+
+                    <form class="row login_form" asp-action="Register">
+                        <div class="text-danger col-md-12 form-group" asp-validation-summary="All"></div>
+
+                        <div class="col-md-12 form-group">
+                            <input type="text" asp-for="@Model.Username" class="form-control" placeholder="Username">
+                            <span asp-validation-for="@Model.Username" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <input  class="form-control" asp-for="@Model.Email" placeholder="Email">
+                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <input type="text" class="form-control" asp-for="@Model.PhoneNumber" placeholder="Phone">
+                            <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="col-md-12 form-group">
+                            <div class="input-group border-end-0">
+                                <input type="password" class="form-control password-field" id="password" asp-for="@Model.Password" placeholder="Password">
+                                <div class="input-group-append">
+                                    <span class="input-group-text bg-transparent border-0"
+                                          id="togglePassword"
+                                          style="border-bottom: 1px solid #ced4da !important; border-radius: 0 !important; cursor: pointer;">
+                                        👁️
+                                    </span>
+                                </div>
+                            </div>
+                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div class="col-md-12 form-group">
+                            <div class="input-group">
+                                <input type="password" class="form-control password-field" id="confirmPassword" asp-for="@Model.ConfirmPassword" placeholder="Confirm Password">
+                                <div class="input-group-append">
+                                    <span class="input-group-text bg-transparent border-0"
+                                          id="toggleConfirmPassword"
+                                          style="border-bottom: 1px solid #ced4da !important; border-radius: 0 !important; cursor: pointer;">
+                                        👁️
+                                    </span>
+                                </div>
+                            </div>
+                            <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-12 form-group text-center">
+                            <button type="submit" class="primary-btn" style="border-radius: 6px;">Register</button>
+                        </div>
+
+                    </form>
+
+                   
+
+                    <style>
+                        .toggle-password {
+                            cursor: pointer;
+                            transition: color 0.3s ease-in-out;
+                        }
+
+                            .toggle-password:hover {
+                                color: #007bff;
+                            }
+                    </style>
+
+                   
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Login Box Area =================-->
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.textContent = type === 'password' ? '👁️' : '🙈'; // Đổi icon dựa vào trạng thái hiển thị
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPasswordField.setAttribute('type', type);
+        this.textContent = type === 'password' ? '👁️' : '🙈'; // Đổi icon dựa vào trạng thái hiển thị
+    });
+</script>
+@section Scripts {
+        
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

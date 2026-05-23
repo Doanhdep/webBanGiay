@@ -1,0 +1,55 @@
+﻿@using MyStore.Helpers
+@model PaginatedList<MyStore.myDTO.Product_DTO>
+<div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
+	<!-- Dropdown chọn số lượng sản phẩm hiển thị + Sắp xếp giá -->
+	<div class="d-flex align-items-center">
+		<!-- Dropdown chọn số lượng sản phẩm hiển thị -->
+		<div class="sorting mr-2">
+			<select id="pageSizeSelect" onchange="changePageSize()">
+				@foreach (var item in ViewBag.PageSizeList as List<SelectListItem>)
+				{
+					<option value="@item.Value" selected="@item.Selected">@item.Text</option>
+				}
+			</select>
+		</div>
+
+		<!-- Dropdown sắp xếp giá -->
+		<div class="sorting">
+			<select id="sortPriceSelect" onchange="changeFilter()">
+				<option value="asc" selected="@(ViewBag.SortOrder == "asc")">Giá thấp đến cao</option>
+				<option value="desc" selected="@(ViewBag.SortOrder == "desc")">Giá cao đến thấp</option>
+			</select>
+		</div>
+	</div>
+	<!-- Phân trang -->
+	<div id="pagination">
+		@await Html.PartialAsync("PageList", Model)
+	</div>
+
+
+</div>
+
+<!-- End Filter Bar -->
+<!-- Start Best Seller -->
+<section class="lattest-product-area pb-40 category-list">
+	<div class="row" id="productItem">
+		<style>
+			.single-product img {
+				width: 100%; /* Đảm bảo ảnh lấp đầy phần tử chứa */
+				height: 250px; /* Đặt chiều cao cố định */
+				object-fit: cover; /* Cắt ảnh vừa khung mà không bị méo */
+			}
+		</style>
+
+		<!-- single product -->
+		@await Html.PartialAsync("ProductItem", Model)
+	</div>
+</section>
+<!-- End Best Seller -->
+<!-- Start Filter Bar -->
+<div class="filter-bar d-flex flex-wrap align-items-center justify-content-between">
+	<!-- Phân trang dưới cùng nằm bên phải -->
+	<div id="pagination1" class="ml-auto">
+		@await Html.PartialAsync("PageList", Model)
+	</div>
+</div>

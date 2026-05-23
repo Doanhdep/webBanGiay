@@ -1,0 +1,54 @@
+﻿@using MyStore.Helpers
+@model PaginatedList<MyStore.myDTO.Product_DTO>
+<div class="pagination">
+	@if (Model.HasPreviousPage)
+	{
+		<a onclick="callGetAction(@(Model.PageIndex - 1), @ViewBag.PageSize)"
+		   class="prev-arrow" style="cursor: pointer;">
+			<i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+		</a>
+	}
+
+	@if (Model.TotalPages <= 3)
+	{
+		@for (int i = 1; i <= Model.TotalPages; i++)
+		{
+			<a onclick="callGetAction(@i, @ViewBag.PageSize)"
+			   class="@(i == Model.PageIndex ? "active" : "")" style="cursor: pointer;">@i</a>
+		}
+	}
+	else
+	{
+		<a onclick="callGetAction(1, @ViewBag.PageSize)"
+		   class="@(Model.PageIndex == 1 ? "active" : "")" style="cursor: pointer;">1</a>
+
+		@if (Model.PageIndex > 3)
+		{
+			<span class="dots" style="font-size: 25px; color:black">...</span>
+		}
+
+		@for (int i = Math.Max(2, Model.PageIndex - 2); i <= Math.Min(Model.TotalPages - 1, Model.PageIndex + 2); i++)
+		{
+			<a onclick="callGetAction(@i, @ViewBag.PageSize)"
+			   class="@(i == Model.PageIndex ? "active" : "")" style="cursor: pointer;">@i</a>
+		}
+
+		@if (Model.PageIndex < Model.TotalPages - 2)
+		{
+			<span class="dots" style="font-size: 25px; color:black">...</span>
+
+		}
+
+		<a onclick="callGetAction(@Model.TotalPages, @ViewBag.PageSize)"
+		   class="@(Model.PageIndex == Model.TotalPages ? "active" : "")" style="cursor: pointer;">@Model.TotalPages</a>
+	}
+
+	@if (Model.HasNextPage)
+	{
+		<a onclick="callGetAction(@(Model.PageIndex + 1), @ViewBag.PageSize)"
+		   class="next-arrow" style="cursor: pointer;">
+			<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+		</a>
+	}
+</div>
+
